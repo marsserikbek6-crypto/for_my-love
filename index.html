@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Туған күніңе</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;1,500;1,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lav:#F4E8FF; --purple:#C084FC; --white:#FFFFFF;
+  --ink:#3B1F57; --ink-soft:#6E5388; --line:#E4CCFB;
+  --radius:28px;
+  --serif:"Cormorant","Playfair Display",Georgia,serif;
+  --sans:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--white);line-height:1.6;overflow-x:hidden}
+.wrap{width:min(1040px,100% - 2.5rem);margin-inline:auto}
+section{padding:clamp(3.5rem,8vw,6rem) 0}
+
+/* Hero */
+.hero{position:relative;text-align:center;background:linear-gradient(180deg,var(--lav) 0%,var(--white) 100%);padding-top:clamp(4rem,10vw,7rem);overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(50px);opacity:.45;background:var(--purple);z-index:0;animation:drift 14s ease-in-out infinite alternate}
+.blob.b1{width:280px;height:280px;top:-80px;left:-80px}
+.blob.b2{width:220px;height:220px;bottom:-60px;right:-50px;animation-delay:-6s;opacity:.3}
+@keyframes drift{to{transform:translate(30px,24px) scale(1.1)}}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,7vw,4.6rem);line-height:1.1;letter-spacing:-.01em}
+.hero h1 em{display:block;font-weight:500;color:var(--ink-soft);font-size:.62em;margin-top:.35em}
+.hero p.lead{margin:1.2rem auto 0;max-width:34rem;color:var(--ink-soft);font-size:1.05rem}
+
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(.6rem,2vw,1.2rem);max-width:640px;margin:2.8rem auto 0}
+.tile{background:var(--white);border:1.5px solid var(--line);border-radius:var(--radius);padding:clamp(1rem,3vw,1.6rem) .4rem;box-shadow:0 10px 30px rgba(192,132,252,.18)}
+.tile b{display:block;font-family:var(--serif);font-weight:600;font-size:clamp(2rem,7vw,3.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.tile span{display:block;margin-top:.5rem;font-size:clamp(.78rem,2.4vw,.95rem);color:var(--ink-soft);font-weight:600}
+.tile.sec{background:var(--purple);border-color:var(--purple)}
+.tile.sec b,.tile.sec span{color:var(--ink)}
+.tile.sec b.tick{animation:tick .45s ease}
+@keyframes tick{0%{transform:translateY(-.25em);opacity:.3}100%{transform:none;opacity:1}}
+.party{font-family:var(--serif);font-size:clamp(1.8rem,5vw,3rem);margin-top:2.4rem;display:none}
+
+/* Section heads */
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,5vw,2.9rem);line-height:1.15;text-align:center}
+.sub{text-align:center;color:var(--ink-soft);margin:.7rem auto 2.4rem;max-width:32rem}
+
+/* Location cards */
+.places{background:var(--white)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.1rem}
+.card{position:relative;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--lav);border:2px solid transparent;border-radius:var(--radius);padding:1.6rem 1.4rem 1.4rem;transition:transform .2s,border-color .2s,background .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(192,132,252,.25)}
+.card .ico{font-size:2.2rem;display:block;margin-bottom:.6rem}
+.card h3{font-family:var(--serif);font-size:1.5rem;line-height:1.2}
+.card p{font-size:.93rem;color:var(--ink-soft);margin-top:.3rem}
+.card .mark{position:absolute;top:1rem;right:1rem;width:28px;height:28px;border-radius:50%;border:2px solid var(--purple);background:var(--white);display:grid;place-items:center;font-size:.9rem;color:transparent;transition:.2s}
+.card[aria-pressed="true"]{border-color:var(--purple);background:var(--white);box-shadow:0 12px 30px rgba(192,132,252,.3)}
+.card[aria-pressed="true"] .mark{background:var(--purple);color:var(--ink);transform:scale(1.1)}
+.choice{min-height:2.2rem;text-align:center;margin-top:1.8rem;font-weight:700;color:var(--ink)}
+
+/* Form */
+.wishes{background:linear-gradient(180deg,var(--white),var(--lav))}
+.box{max-width:640px;margin-inline:auto;background:var(--white);border:1.5px solid var(--line);border-radius:var(--radius);padding:clamp(1.4rem,4vw,2.2rem);box-shadow:0 14px 40px rgba(192,132,252,.2)}
+label{display:block;font-weight:700;margin-bottom:.6rem}
+textarea{width:100%;min-height:170px;resize:vertical;font:inherit;color:var(--ink);background:var(--lav);border:2px solid transparent;border-radius:20px;padding:1rem 1.1rem;transition:.2s}
+textarea::placeholder{color:#9C84B5}
+textarea:focus{outline:none;border-color:var(--purple);background:var(--white)}
+.btn{margin-top:1.1rem;width:100%;font:inherit;font-weight:700;font-size:1.05rem;color:var(--ink);background:var(--purple);border:0;border-radius:999px;padding:.95rem 1.6rem;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(192,132,252,.5)}
+.status{margin-top:1rem;text-align:center;font-weight:600;min-height:1.6rem}
+.status.err{color:#9B2C5E}
+
+/* Footer */
+footer{text-align:center;padding:2.5rem 1rem 3rem;background:var(--lav);color:var(--ink-soft);font-size:.95rem}
+.egg{color:var(--purple);opacity:.14;text-decoration:none;font-size:.8rem;margin-left:.2rem;transition:opacity .4s}
+.egg:hover,.egg:focus-visible{opacity:.9}
+
+:focus-visible{outline:3px solid var(--purple);outline-offset:3px}
+@media (max-width:420px){.countdown{gap:.45rem}.tile{border-radius:20px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="wrap">
+    <h1>Қымбатты Гуларай,<em>туған күніңе дейін...</em></h1>
+    <p class="lead">Әр секунд саған жақындатып барады. Бұл бет – тек сен үшін жасалған кішкентай тосынсый.</p>
+    <div class="countdown" id="countdown" aria-live="off">
+      <div class="tile"><b id="d">00</b><span>Күн</span></div>
+      <div class="tile"><b id="h">00</b><span>Сағат</span></div>
+      <div class="tile"><b id=" m">00</b><span>Минут</span></div>
+      <div class="tile sec"><b id="s">00</b><span>Секунд</span></div>
+    </div>
+    <p class="party" id="party">Туған күніңмен, zhuregim❤️! 🎉</p>
+  </div>
+</header>
+
+<section class="places" id="places">
+  <div class="wrap">
+    <h2>Қайда барамыз?</h2>
+    <p class="sub">Өзіңе ұнайтын жерді таңда – біз сол жерде кездесеміз.</p>
+    <div class="cards" id="cards">
+      <button class="card" type="button" aria-pressed="false" data-name="Жайлы кафе">
+        <span class="mark">✓</span><span class="ico">☕</span>
+        <h3>Жайлы кафе</h3><p>Тәтті десерт пен жылы шай үстінде әңгімелесеміз.</p>
+      </button>
+      <button class="card" type="button" aria-pressed="false" data-name="Кинотеатр">
+        <span class="mark">✓</span><span class="ico">🎬</span>
+        <h3>Кинотеатр</h3><p>Ұнайтын фильмді бірге көреміз.</p>
+      </button>
+      <button class="card" type="button" aria-pressed="false" data-name="Саябақта серуен">
+        <span class="mark">✓</span><span class="ico">🌸</span>
+        <h3>Саябақта серуен</h3><p>Таза ауада баяу қыдырып, суретке түсеміз.</p>
+      </button>
+      <button class="card" type="button" aria-pressed="false" data-name="Тосынсый орын">
+        <span class="mark">✓</span><span class="ico">🎁</span>
+        <h3>Тосынсый орын</h3><p>Қайда екенін алдын ала айтпаймын.</p>
+      </button>
+    </div>
+    <p class="choice" id="choice" role="status"></p>
+  </div>
+</section>
+
+<section class="wishes" id="wishes">
+  <div class="wrap">
+    <h2>Туған күннен не күтесің?</h2>
+    <p class="sub">Ойларыңды, қалауларыңды немесе арманыңды еркін жаз.</p>
+    <div class="box">
+      <label for="wish">Сенің тілегің</label>
+      <textarea id="wish" placeholder="Ойларыңды, тілектеріңді осында жаз..."></textarea>
+      <button class="btn" id="send" type="button">Жіберу</button>
+      <p class="status" id="status" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Сені шексіз жақсы көремін жаным
+  <!-- Жасырын сілтеме: href-ті өзгертіңіз -->
+  <a class="egg" href="https://example.com" aria-label="Тосынсый" title="♥">❤️</a>
+</footer>
+
+<script>
+/* ===== Баптаулар ===== */
+const BIRTHDAY = { month: 10, day: 23 };   // Туған күн: ай (1–12) және күн. Өзгертіңіз!
+
+/* ===== Кері санақ ===== */
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+
+function nextBirthday(now){
+  let t = new Date(now.getFullYear(), BIRTHDAY.month - 1, BIRTHDAY.day);
+  const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (t < startToday) t = new Date(now.getFullYear() + 1, BIRTHDAY.month - 1, BIRTHDAY.day);
+  return t;
+}
+
+function update(){
+  const now = new Date();
+  const isToday = now.getMonth() === BIRTHDAY.month - 1 && now.getDate() === BIRTHDAY.day;
+  $("countdown").style.display = isToday ? "none" : "";
+  $("party").style.display = isToday ? "block" : "none";
+  if (isToday) return;
+
+  const diff = nextBirthday(now) - now;
+  const secs = Math.floor(diff / 1000);
+  const vals = { d: Math.floor(secs / 86400), h: Math.floor(secs % 86400 / 3600),
+                 m: Math.floor(secs % 3600 / 60), s: secs % 60 };
+  for (const k in vals){
+    const el = $(k), v = pad(vals[k]);
+    if (el.textContent !== v){
+      el.textContent = v;
+      if (k === "s"){ el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick"); }
+    }
+  }
+}
+update(); setInterval(update, 1000);
+
+/* ===== Орын таңдау ===== */
+const cards = document.querySelectorAll(".card");
+cards.forEach(card => card.addEventListener("click", () => {
+  cards.forEach(c => c.setAttribute("aria-pressed", "false"));
+  card.setAttribute("aria-pressed", "true");
+  const name = card.dataset.name;
+  $("choice").textContent = "Тамаша таңдау! Біз мына жерге барамыз: " + name + " ♡";
+  try { localStorage.setItem("gularai-place", name); } catch(e){}
+}));
+try {
+  const saved = localStorage.getItem("gularai-place");
+  const match = saved && [...cards].find(c => c.dataset.name === saved);
+  if (match) match.click();
+} catch(e){}
+
+/* ===== Тілек формасы ===== */
+$("send").addEventListener("click", () => {
+  const text = $("wish").value.trim();
+  const st = $("status");
+  if (!text){
+    st.className = "status err";
+    st.textContent = "Алдымен бірнеше сөз жазып көрші.";
+    return;
+  }
+  try { localStorage.setItem("gularai-wish", text); } catch(e){}
+  st.className = "status";
+  st.textContent = "Рахмет, Гуларай! Тілегің жіберілді ♡";
+  $("wish").value = "";
+});
+</script>
+</body>
+</html>
