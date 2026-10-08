@@ -201,7 +201,7 @@ cards.forEach(card => card.addEventListener("click", () => {
   cards.forEach(c => c.setAttribute("aria-pressed", "false"));
   card.setAttribute("aria-pressed", "true");
   selectedLocation = card.dataset.name || "";
-  $("choice").textContent = "Тамаша таңдау! Біз " + selectedLocation + " орынында кездесеміз.";
+  $("choice").textContent = "Тамаша таңдау! Біз мына жерде кездесеміз: " + selectedLocation + " ♡";
 }));
 
 // "Жіберу" батырмасын басқанда Google Кестеге мәлімет жіберу
