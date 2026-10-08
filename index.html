@@ -145,20 +145,25 @@ footer{text-align:center;padding:2.5rem 1rem 3rem;background:var(--lav);color:va
 
 <script>
 /* ===== Баптаулар ===== */
-const BIRTHDAY = { month: 10, day: 23 };   // Туған күн: ай (1–12) және күн. Өзгертіңіз!
+// Google Apps Script-тен көшіріп алған Web App URL сілтемесі
+const API_URL = "https://script.google.com/macros/s/AKfycbyw5zXP0y_e8vcItfv59sOTAvHEaANXjyE7Zz7in1goZx3QU-HdQ9ir_UwJUYuS5tjO/exec";
 
-/* ===== Кері санақ ===== */
+// Туған күн датасы: ай (1-12) және күн
+const BIRTHDAY = { month: 10, day: 23 };
+
 const $ = id => document.getElementById(id);
 const pad = n => String(n).padStart(2, "0");
+let selectedLocation = "";
 
-function nextBirthday(now){
+// Кері санақ таймерін есептеу функциясы
+function nextBirthday(now) {
   let t = new Date(now.getFullYear(), BIRTHDAY.month - 1, BIRTHDAY.day);
   const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   if (t < startToday) t = new Date(now.getFullYear() + 1, BIRTHDAY.month - 1, BIRTHDAY.day);
   return t;
 }
 
-function update(){
+function update() {
   const now = new Date();
   const isToday = now.getMonth() === BIRTHDAY.month - 1 && now.getDate() === BIRTHDAY.day;
   $("countdown").style.display = isToday ? "none" : "";
@@ -167,47 +172,74 @@ function update(){
 
   const diff = nextBirthday(now) - now;
   const secs = Math.floor(diff / 1000);
-  const vals = { d: Math.floor(secs / 86400), h: Math.floor(secs % 86400 / 3600),
-                 m: Math.floor(secs % 3600 / 60), s: secs % 60 };
-  for (const k in vals){
+  const vals = {
+    d: Math.floor(secs / 86400),
+    h: Math.floor(secs % 86400 / 3600),
+    m: Math.floor(secs % 3600 / 60),
+    s: secs % 60
+  };
+
+  for (const k in vals) {
     const el = $(k), v = pad(vals[k]);
-    if (el.textContent !== v){
+    if (el.textContent !== v) {
       el.textContent = v;
-      if (k === "s"){ el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick"); }
+      if (k === "s") {
+        el.classList.remove("tick");
+        void el.offsetWidth;
+        el.classList.add("tick");
+      }
     }
   }
 }
-update(); setInterval(update, 1000);
 
-/* ===== Орын таңдау ===== */
+update();
+setInterval(update, 1000);
+
+// Карточка таңдалғанда орын атын сақтап алу
 const cards = document.querySelectorAll(".card");
 cards.forEach(card => card.addEventListener("click", () => {
   cards.forEach(c => c.setAttribute("aria-pressed", "false"));
   card.setAttribute("aria-pressed", "true");
-  const name = card.dataset.name;
-  $("choice").textContent = "Тамаша таңдау! Біз мына жерге барамыз: " + name + " ♡";
-  try { localStorage.setItem("gularai-place", name); } catch(e){}
+  selectedLocation = card.dataset.name || "";
+  $("choice").textContent = "Тамаша таңдау! Біз " + selectedLocation + " орынында кездесеміз.";
 }));
-try {
-  const saved = localStorage.getItem("gularai-place");
-  const match = saved && [...cards].find(c => c.dataset.name === saved);
-  if (match) match.click();
-} catch(e){}
 
-/* ===== Тілек формасы ===== */
-$("send").addEventListener("click", () => {
-  const text = $("wish").value.trim();
-  const st = $("status");
-  if (!text){
-    st.className = "status err";
-    st.textContent = "Алдымен бірнеше сөз жазып көрші.";
-    return;
-  }
-  try { localStorage.setItem("gularai-wish", text); } catch(e){}
-  st.className = "status";
-  st.textContent = "Рахмет, Гуларай! Тілегің жіберілді ♡";
-  $("wish").value = "";
-});
+// "Жіберу" батырмасын басқанда Google Кестеге мәлімет жіберу
+const sendBtn = $("send");
+if (sendBtn) {
+  sendBtn.addEventListener("click", async () => {
+    const wish = $("wish") ? $("wish").value.trim() : "";
+    const status = $("status");
+
+    if (!selectedLocation && !wish) {
+      if (status) status.textContent = "Өтініш, орынды таңдаңыз немесе тілек жазыңыз!";
+      return;
+    }
+
+    if (status) status.textContent = "Жіберілуде...";
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+          location: selectedLocation,
+          expectations: wish
+        })
+      });
+
+      const data = await res.json();
+      if (data.result === "success") {
+        if (status) status.textContent = "Тілегіңіз сәтті сақталды! ❤️";
+        if ($("wish")) $("wish").value = "";
+      } else {
+        if (status) status.textContent = "Қате пайда болды.";
+      }
+    } catch (e) {
+      if (status) status.textContent = "Жіберу сәтсіз аяқталды.";
+    }
+  });
+}
 </script>
 </body>
 </html>
